@@ -5,9 +5,6 @@ inputs:
   version:
     required: true
     description: "Version of the image to be deployed. If not provided, it will be set to 'latest'."
-  ssm-parameter-name:
-    required: true
-    description: "Name of the SSM parameter to update."
   environment:
     required: true
     description: "Environment for which the SSM parameter is being updated."
@@ -58,6 +55,6 @@ runs:
         ECR_REPOSITORY: ${{ inputs.ecr-repository }}
         IMAGE_VERSION: ${{ inputs.version }}
         ENVIRONMENT: ${{ inputs.environment }}
-        SSM_PARAMETER_NAME: ${{ inputs.ssm-parameter-name }}
+        SSM_PARAMETER_NAME: /${{ inputs.environment }}/${{ inputs.ecr-repository }}/version'
         SECRETS_ENVIRONMENT: ${{ inputs.secrets-environment }}
       run: node ./scripts/check-and-change-image.js
