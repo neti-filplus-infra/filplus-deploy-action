@@ -55,6 +55,6 @@ runs:
         ECR_REPOSITORY: ${{ inputs.ecr-repository }}
         IMAGE_VERSION: ${{ inputs.version }}
         ENVIRONMENT: ${{ inputs.environment }}
-        SSM_PARAMETER_NAME: /${{ inputs.environment }}/${{ inputs.ecr-repository }}/version'
+        SSM_PARAMETER_NAME: "/${{ inputs.environment }}/${{ inputs.ecr-repository }}/version"
         SECRETS_ENVIRONMENT: ${{ inputs.secrets-environment }}
       run: node $GITHUB_ACTION_PATH/scripts/check-and-change-image.js
