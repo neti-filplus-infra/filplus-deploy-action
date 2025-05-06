@@ -57,4 +57,4 @@ runs:
         ENVIRONMENT: ${{ inputs.environment }}
         SSM_PARAMETER_NAME: /${{ inputs.environment }}/${{ inputs.ecr-repository }}/version'
         SECRETS_ENVIRONMENT: ${{ inputs.secrets-environment }}
-      run: node ./scripts/check-and-change-image.js
+      run: node $GITHUB_ACTION_PATH/scripts/check-and-change-image.js
