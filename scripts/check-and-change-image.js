@@ -4,10 +4,11 @@ const ECR_REPOSITORY = process.env.ECR_REPOSITORY;
 const IMAGE_VERSION = process.env.IMAGE_VERSION;
 const SSM_PARAMETER_NAME = process.env.SSM_PARAMETER_NAME;
 const ENVIRONMENT = process.env.ENVIRONMENT;
+const AWS_REGION = process.env.AWS_REGION || "us-east-1";
 
-if (!ECR_REPOSITORY || !IMAGE_VERSION || !SSM_PARAMETER_NAME) {
+if (!ECR_REPOSITORY || !IMAGE_VERSION || !SSM_PARAMETER_NAME || !AWS_REGION) {
   console.error(
-    "Missing environment variables: ECR_REPOSITORY, IMAGE_VERSION, SSM_PARAMETER_NAME"
+    "Missing environment variables: ECR_REPOSITORY, IMAGE_VERSION, SSM_PARAMETER_NAME, AWS_REGION"
   );
   process.exit(1);
 }
@@ -23,7 +24,7 @@ function runCommand(command) {
 }
 
 let currentVersions = runCommand(
-  `aws ssm get-parameter --name "${SSM_PARAMETER_NAME}" --query "Parameter.Value" --output json`
+  `aws ssm get-parameter --name "${SSM_PARAMETER_NAME}" --region "${AWS_REGION}" --query "Parameter.Value" --output json`
 );
 
 console.log("Current versions:", currentVersions);
@@ -54,7 +55,7 @@ const newCurrentSSMParam = IMAGE_VERSION;
 console.log("New current SSM params:", newCurrentSSMParam);
 
 try {
-  const putNewVersion = `aws ssm put-parameter --name "${SSM_PARAMETER_NAME}" --value "${newCurrentSSMParam}" --type String --overwrite`;
+  const putNewVersion = `aws ssm put-parameter --name "${SSM_PARAMETER_NAME}" --region "${AWS_REGION}" --value "${newCurrentSSMParam}" --type String --overwrite`;
   execSync(putNewVersion, { stdio: "inherit" });
 
   console.log(`Update version COMPLETE!`);
